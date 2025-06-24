@@ -1,0 +1,46 @@
+<!-- Local rules -->
+
+<!-- Modify it at your will. -->
+<!-- Copyright (C) 2015, Wazuh Inc. -->
+
+<!-- Example -->
+<group name="local,syslog,sshd,">
+
+  <!--
+  Dec 10 01:02:02 host sshd[1234]: Failed none for root from 1.1.1.1 port 1066 ssh2
+  -->
+  <rule id="100001" level="5">
+    <if_sid>5716</if_sid>
+    <srcip>1.1.1.1</srcip>
+    <description>sshd: authentication failed from IP 1.1.1.1.</description>
+    <group>authentication_failed,pci_dss_10.2.4,pci_dss_10.2.5,</group>
+  </rule>
+
+</group>
+
+
+<!-- Added REH 2025-06-24 -->
+<!-- Authentik failures -->
+
+<group name="authentik">
+  <rule id="100008" level="5">
+    <program_name>docker/authentik_server</program_name>
+    <match>login_failed</match>
+    <user negate="yes">AnonymousUser</user>
+    <description>Failed Authentik Login</description>
+    <group>authentication_failed,pci_dss_10.2.4,pci_dss_10.2.5,</group>
+    <mitre>
+      <id>T1110.001</id>
+    </mitre>
+  </rule>
+  <rule id="100009" level="9">
+    <program_name>docker/authentik_server</program_name>
+    <match>login_failed</match>
+    <user>AnonymousUser</user>
+    <description>Invalid Authentik Login: No such user</description>
+    <group>authentication_failed,pci_dss_10.2.4,pci_dss_10.2.5,</group>
+    <mitre>
+      <id>T1589.001</id>
+    </mitre>
+  </rule>
+</group>
