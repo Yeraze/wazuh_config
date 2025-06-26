@@ -7,7 +7,9 @@ and log monitoring of those logs integrated with Wazuh.  Details can be found in
 https://wazuh.com/blog/docker-container-security-monitoring-with-wazuh/
 
 # Authentik
-* Login Failure - invalid password with Authentik
-  * Tagged as T1110.001 (Brute Force, Password guessing)
+* Tagged as T1110.001 (Brute Force, Password guessing)
+  * Login Failure - invalid password with Authentik
+  * Login Failure - invalid password or account with Synology DSM
+
 * Login Failure - invalid account with Authentik
   * Tagged as T1589.001 (Reconaissance, Credentials)

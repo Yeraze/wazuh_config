@@ -44,3 +44,15 @@
     </mitre>
   </rule>
 </group>
+
+<group name="synology">
+  <rule id="100020" level="5">
+    <system_name>Synology</system_name>
+    <extra_data>failed to sign in</extra_data>
+    <description>Failed Synology Login</description>
+    <group>authentication_failed,pci_dss_10.2.4,pci_dss_10.2.5,</group>
+    <mitre>
+      <id>T1110.001</id>
+    </mitre>
+  </rule>
+</group>

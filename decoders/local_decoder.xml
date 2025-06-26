@@ -51,3 +51,13 @@
 	<regex>"username": "(\w+)"}}</regex>
 	<order>user</order>
 </decoder>
+
+<decoder name="synology">
+	<prematch>Synology-></prematch>
+</decoder>
+
+<decoder name="synology">
+	<parent>synology</parent>
+	<regex>(\w+)->(\d+.\d+.\d+.\d+) \.* User [(\w+)] from [(\d+.\d+.\d+.\d+)] (\.*)$</regex>
+	<order>system_name,dstip,user,srcip,extra_data</order>
+</decoder>
