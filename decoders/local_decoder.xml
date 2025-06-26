@@ -53,11 +53,14 @@
 </decoder>
 
 <decoder name="synology">
-	<prematch>Synology-></prematch>
+	<prematch>from</prematch>
+	<regex>(\.*) from \(\d+.\d+.\d+.\d+\)$</regex>
+	<order>extra_data,srcip</order>
 </decoder>
 
 <decoder name="synology">
-	<parent>synology</parent>
-	<regex>(\w+)->(\d+.\d+.\d+.\d+) \.* User [(\w+)] from [(\d+.\d+.\d+.\d+)] (\.*)$</regex>
-	<order>system_name,dstip,user,srcip,extra_data</order>
+	<program_name>Connection</program_name>
+	<prematch>from</prematch>
+	<regex>User [(\w+)] from [(\d+.\d+.\d+.\d+)] (\.*)$</regex>
+	<order>user,srcip,extra_data</order>
 </decoder>
