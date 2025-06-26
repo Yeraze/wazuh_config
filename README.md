@@ -11,5 +11,8 @@ https://wazuh.com/blog/docker-container-security-monitoring-with-wazuh/
   * Login Failure - invalid password with Authentik
   * Login Failure - invalid password or account with Synology DSM
 
-* Login Failure - invalid account with Authentik
-  * Tagged as T1589.001 (Reconaissance, Credentials)
+* Tagged as T1589.001 (Reconaissance, Credentials)
+  * Login Failure - invalid account with Authentik
+
+* Tagged as T1590.006 (Reconaissance, Network Security Appliances)
+  * System Test Message sent from Synology Log Manager
