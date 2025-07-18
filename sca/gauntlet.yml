@@ -66,7 +66,7 @@ checks:
     title: "Zabbix monitoring online"
     description: "Detects Zabbix monitoring agent"
     rationale: "Zabbix monitors system for unusual load or system changes"
-    remediation: "Investigate network configuration"
+    remediation: "Install zabbix_agent, verify it is enabled and active"
     compliance:
       - mitre_attack: ["T1562.001 - Impair Defenses: Disable or Modify Tools"]
     condition: any
@@ -78,10 +78,38 @@ checks:
     title: "Zabbix monitoring connected"
     description: "Detects Zabbix monitoring agent talking to the right server"
     rationale: "Zabbix monitors system for unusual load or system changes"
-    remediation: "Investigate network configuration"
+    remediation: "Install zabbix_agent, verify it is enabled and active"
     compliance:
       - mitre_attack: ["T1562.001 - Impair Defenses: Disable or Modify Tools"]
     condition: any
     rules:
       - 'f:/etc/zabbix/zabbix_agentd.conf -> !r:^# && r:^ServerActive=192.168.5.80'
       - 'f:/etc/zabbix/zabbix_agent2.conf -> !r:^# && r:^ServerActive=192.168.5.80'
+
+  - id: 100107
+    title: "Basic SSH Configuration"
+    description: "Checks for basic SSH Configuration parameters"
+    rationale: "SSH is a common entry point"
+    remediation: "Check /etc/ssh/sshd_config"
+    compliance:
+      - mitre_attack: ["T1562.001 - Impair Defenses: Disable or Modify Tools"]
+    condition: all
+    rules:
+      - 'f:/etc/ssh/sshd_config -> !r:^# && r:^PermitRootLogin\s+no'
+      - 'not f:/etc/ssh/sshd_config -> !r:^# && r:PermitEmptyPasswords'
+
+  - id: 100108
+    title: "APT Unattended Upgrades"
+    description: "Checks for automatic upgrades enabled"
+    rationale: "Patch newly discovered holes"
+    remediation: "Ensure unattended-upgrades is enabled, sudo dpkg-reconfigure --priority=low unattended-upgrades"
+    compliance:
+      - mitre_attack: ["T1562.001 - Impair Defenses: Disable or Modify Tools"]
+    condition: all
+    rules:
+      - 'c:apt-config dump APT::Periodic::Unattended-Upgrade -> APT::Periodic::Unattended-Upgrade "1";'
+      - 'c:systemctl is-active apt-daily-upgrade.timer -> r:^active'
+      - 'c:systemctl is-active apt-daily.timer -> r:^active'
+      - 'f:/etc/apt/apt.conf.d/50unattended-upgrades -> !r:^\s*// && r:security'
+
+
