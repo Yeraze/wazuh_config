@@ -1,0 +1,86 @@
+# Security Configuration Assessment
+# Auto-color Malware Detection for Linux Systems
+# Copyright (C) 2025, Wazuh Inc.
+#
+# This program is free software; you can redistribute it
+# and/or modify it under the terms of the GNU General Public
+# License (version 2) as published by the FSF - Free Software
+# Foundation
+
+policy:
+  id: "gauntlet"
+  file: "gauntlet.yml"
+  name: "Gauntlet Network Checks"
+  description: "Checking for standard Gauntlet security posture"
+
+
+requirements:
+  title: "Checking on Unix/Linux based systems."
+  description: "Check that the system is Unix/Linux based."
+  condition: any
+  rules:
+    - 'f:/etc/passwd'
+
+
+checks:
+  - id: 100102
+    title: "Adguard DNS Configuration"
+    description: "Detects Proper DNS Servers in use"
+    rationale: "Adguard DNS servers block malware and ads, could be bypassed to expose services"
+    remediation: "Investigate network configuration"
+    compliance:
+      - mitre_attack: ["T1562.001 - Impair Defenses: Disable or Modify Tools"]
+    condition: all
+    rules:
+      - 'f:/etc/msmtprc'
+      - 'c:/usr/sbin/sendmail -S -> r:^SMTP server at smtp.resend.com'
+
+  - id: 100103
+    title: "Mail msmtp Configuration"
+    description: "Detects Proper msmtp configuration"
+    rationale: "Enables mail back to admins"
+    remediation: "Investigate network configuration"
+    compliance:
+      - mitre_attack: ["T1568 - Dynamic Resolution"]
+    condition: all
+    rules:
+      - 'c:nmcli -g IP4.DNS device show -> !r:^$ && r:192.168.5.92\s\|\s192.168.5.91'
+
+  - id: 100104
+    title: "rkhunter nightly scans"
+    description: "Detects nightly scans of rkhunter"
+    rationale: "rkhunter detects rootkits and system modifications"
+    remediation: "Investigate network configuration"
+    compliance:
+      - mitre_attack: ["T1562.001 - Impair Defenses: Disable or Modify Tools"]
+    condition: all
+    rules:
+      - 'f:/etc/rkhunter.conf'
+      - 'f:/etc/cron.daily/rkhunter'
+      - 'f:/etc/default/rkhunter -> r:^CRON_DAILY_RUN="yes"'
+      - 'f:/etc/default/rkhunter -> r:^REPORT_EMAIL="randall.hand@gmail.com"'
+      - 'c:md5sum /etc/cron.daily/rkhunter -> r:36226ec92f706de42423fb6ef4110492\s+/etc/cron.daily/rkhunter'
+
+  - id: 100105
+    title: "Zabbix monitoring online"
+    description: "Detects Zabbix monitoring agent"
+    rationale: "Zabbix monitors system for unusual load or system changes"
+    remediation: "Investigate network configuration"
+    compliance:
+      - mitre_attack: ["T1562.001 - Impair Defenses: Disable or Modify Tools"]
+    condition: any
+    rules:
+      - 'c:systemctl is-active zabbix-agent -> r:^active'
+      - 'c:systemctl is-active zabbix-agent2 -> r:^active'
+
+  - id: 100106
+    title: "Zabbix monitoring connected"
+    description: "Detects Zabbix monitoring agent talking to the right server"
+    rationale: "Zabbix monitors system for unusual load or system changes"
+    remediation: "Investigate network configuration"
+    compliance:
+      - mitre_attack: ["T1562.001 - Impair Defenses: Disable or Modify Tools"]
+    condition: any
+    rules:
+      - 'f:/etc/zabbix/zabbix_agentd.conf -> !r:^# && r:^ServerActive=192.168.5.80'
+      - 'f:/etc/zabbix/zabbix_agent2.conf -> !r:^# && r:^ServerActive=192.168.5.80'
