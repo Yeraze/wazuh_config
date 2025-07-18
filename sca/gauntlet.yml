@@ -30,10 +30,11 @@ checks:
     remediation: "Investigate network configuration"
     compliance:
       - mitre_attack: ["T1562.001 - Impair Defenses: Disable or Modify Tools"]
-    condition: all
+    condition: any
     rules:
       - 'c:resolvectl dns -i 2 -> r:192.168.5.92\s192.168.5.91'
-
+      - 'c:nmcli -g IP4.DNS device show -> !r:^$ && r:192.168.5.92\s\|\s192.168.5.91'
+      
   - id: 100103
     title: "Mail msmtp Configuration"
     description: "Detects Proper msmtp configuration"
