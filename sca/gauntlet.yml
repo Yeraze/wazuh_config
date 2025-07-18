@@ -32,8 +32,7 @@ checks:
       - mitre_attack: ["T1562.001 - Impair Defenses: Disable or Modify Tools"]
     condition: all
     rules:
-      - 'f:/etc/msmtprc'
-      - 'c:/usr/sbin/sendmail -S -> r:^SMTP server at smtp.resend.com'
+      - 'c:resolvectl dns -i 2 -> r:192.168.5.92\s192.168.5.91'
 
   - id: 100103
     title: "Mail msmtp Configuration"
@@ -44,7 +43,8 @@ checks:
       - mitre_attack: ["T1568 - Dynamic Resolution"]
     condition: all
     rules:
-      - 'c:nmcli -g IP4.DNS device show -> !r:^$ && r:192.168.5.92\s\|\s192.168.5.91'
+      - 'f:/etc/msmtprc'
+      - 'c:/usr/sbin/sendmail -S -> r:^SMTP server at smtp.resend.com'
 
   - id: 100104
     title: "rkhunter nightly scans"
