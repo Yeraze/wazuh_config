@@ -18,6 +18,21 @@
 
 </group>
 
+<!-- Suppress common Docker healthcheck exec_start events -->
+<group name="docker,">
+  <rule id="100200" level="0">
+    <if_sid>87907</if_sid>
+    <match>exec_start: /bin/sh -c pg_isready</match>
+    <description>Suppress Docker healthcheck: pg_isready (postgres)</description>
+  </rule>
+  <rule id="100201" level="0">
+    <if_sid>87907</if_sid>
+    <regex>exec_start: /bin/sh -c (curl|wget).*/health</regex>
+    <description>Suppress Docker healthcheck: curl/wget to health endpoint</description>
+  </rule>
+
+</group>
+
 
 <!-- Added REH 2025-06-24 -->
 <!-- Authentik failures -->
