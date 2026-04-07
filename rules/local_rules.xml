@@ -28,8 +28,82 @@
 
   <rule id="100201" level="0">
     <if_sid>87907</if_sid>
-    <regex>exec_start:.*health</regex>
-    <description>Suppress Docker healthcheck: curl/wget to health endpoint</description>
+    <match>exec_start: pg_isready</match>
+    <description>Suppress Docker healthcheck: pg_isready (postgres)</description>
+  </rule>
+
+  <rule id="100202" level="0">
+    <if_sid>87907</if_sid>
+    <regex>exec_start:\.*curl\.*health</regex>
+    <description>Suppress Docker healthcheck: curl to health endpoint</description>
+  </rule>
+
+  <rule id="100203" level="0">
+    <if_sid>87907</if_sid>
+    <regex>exec_start:\.*wget\.*health</regex>
+    <description>Suppress Docker healthcheck: wget to health endpoint</description>
+  </rule>
+
+  <rule id="100204" level="0">
+    <if_sid>87907</if_sid>
+    <match>exec_start: /watchtower --health-check</match>
+    <description>Suppress Docker healthcheck: watchtower</description>
+  </rule>
+
+  <rule id="100205" level="0">
+    <if_sid>87907</if_sid>
+    <match>healthcheck</match>
+    <description>Suppress Docker healthcheck: healthcheck</description>
+  </rule>
+  <rule id="100206" level="0">
+    <if_sid>87907</if_sid>
+    <regex>exec_start:\.*curl --fail \.*localhost\.* \|\| exit 1</regex>
+    <description>Suppress Docker healthcheck: curl localhost fail</description>
+  </rule>
+  <rule id="100207" level="0">
+    <if_sid>87907</if_sid>
+    <match>exec_start: /bin/sh -c redis-cli ping</match>
+    <description>Suppress Docker healthcheck: redis</description>
+  </rule>
+  <rule id="100208" level="0">
+    <if_sid>87907</if_sid>
+    <regex>exec_start:\.*curl\.*ping</regex>
+    <description>Suppress Docker healthcheck: arr ping</description>
+  </rule>
+  <rule id="100209" level="0">
+    <if_sid>87907</if_sid>
+    <match>exec_start: wget --no-verbose --tries=1 -O - http://localhost:7745/api/v1/status</match>
+    <description>Suppress Docker healthcheck: homebox</description>
+  </rule>
+  <rule id="100210" level="0">
+    <if_sid>87907</if_sid>
+    <match>xec_start: /bin/sh -c pgrep -f main.py</match>
+    <description>Suppress Docker healthcheck: decluttarr</description>
+  </rule>
+  <rule id="100211" level="0">
+    <if_sid>87907</if_sid>
+    <match>exec_start: /bin/sh -c node src/scripts/health-check.js</match>
+    <description>Suppress Docker healthcheck: ynab</description>
+  </rule>
+  <rule id="100212" level="0">
+    <if_sid>87907</if_sid>
+    <match>exec_start: curl -fs -S -L --max-time 2 http://localhost:8000</match>
+    <description>Suppress Docker healthcheck: paperless</description>
+  </rule>
+  <rule id="100213" level="0">
+    <if_sid>87907</if_sid>
+    <match>exec_start: /bin/sh -c netstat -a | grep -q 9999</match>
+    <description>Suppress Docker healthcheck: stash</description>
+  </rule>
+  <rule id="100214" level="0">
+    <if_sid>87907</if_sid>
+    <match>exec_start: /bin/sh -c /usr/bin/timeout 5s /bin/sh -c "/usr/bin/wg show | /bin/grep -q interface || exit 1"</match>
+    <description>Suppress Docker healthcheck: wg-easy</description>
+  </rule>
+  <rule id="100215" level="0">
+    <if_sid>87907</if_sid>
+    <regex>exec_start:\.*curl --fail \.*http://localhost\.*status"$</regex>
+    <description>Suppress Docker healthcheck: curl localhost fail</description>
   </rule>
 
 </group>
